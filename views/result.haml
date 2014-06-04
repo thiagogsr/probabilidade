@@ -6,14 +6,47 @@
     %meta{name: 'viewport', content: 'width=device-width, initial-scale=1'}
     %link{rel: 'stylesheet', href: '/css/bootstrap.min.css'}
     %link{rel: 'stylesheet', href: '/css/bootstrap-theme.min.css'}
+    :css
+      .popover {max-width: none !important}
   %body
     .container-fluid
       .row
         .col-md-12
           %h1 Probabilidade
           %h4 Resultados
+      .row
+        .col-md-12
+          %table.table.table-bordered
+            %thead
+              %tr
+                %th n
+                %th x
+                - success = 0
+                - 19.times do |h|
+                  - success += 0.05
+                  %th= success.round(2)
+            %tbody
+              - @result.each do |k, v|
+                %tr
+                  %td
+                    %a{href: '#'}= @sample
+                  %td
+                    %a{href: '#'}= k
+                  - v.each do |k, probability|
+                    %td
+                      %a.pop{href: '#', 'data-content' => "<img src='#{probability[:image]}' alt='Fórmula' />"}= probability[:result]
+
       %a{href: '/', title:'Voltar'} Voltar
       %br/
       %br/
 
-= @result.to_s
+  %script{src: '/js/jquery-2.1.1.min.js'}
+  %script{src: '/js/bootstrap.min.js'}
+  :javascript
+    $(".pop").popover({
+      toggle: 'popover',
+      title: "Fórmula",
+      html: 'true',
+      placement: 'auto',
+      trigger: 'hover'
+    });

@@ -3,6 +3,8 @@ Bundler.setup
 
 require 'sinatra'
 require 'haml'
+require 'open-uri'
+require 'json'
 
 configure { set :server, :puma }
 set :public_folder, File.dirname(__FILE__) + '/public'
@@ -17,28 +19,41 @@ end
 
 post '/' do
   @sample = params[:sample]
-  @result = Hash.new
-  success = 0
-  fail = 1
+  @result = {}
   sample = @sample.to_i
-  sample.times do |a|
+
+  (sample+1).times do |a|
     value = a.to_i
     diff = sample - value;
-    x = Hash.new
+    success = 0.0
+    fail = 1.0
+    @result[value] = {}
+
     19.times do |i|
       success += 0.05
       fail -= 0.05
+      success = success.round(2)
+      fail = fail.round(2)
 
       numerator = factorial(sample)
       denominator = factorial(value) * factorial(diff)
       multiplication = (success ** value) * (fail ** diff)
+      formule = "P\\left ( x=#{value} \\right ) = \\binom{#{sample}}{#{value}} * #{success}^{#{value}} * #{fail}^{#{diff}} = "
+      formule += "\\frac{#{sample}!}{#{value}!\\left (#{sample}-#{value} \\right )!} * #{success}^{#{value}} * #{fail}^{#{diff}}"
 
-      x[value][i][:formule] = "P\left ( x=#{value} \right ) = \binom{#{sample}}{#{value}} * #{success}^#{value} * #{fail}^#{diff} = "
-      x[value][i][:formule] += "\frac{#{sample}!}{#{value}!\left (#{sample}-#{value} \right )!} * #{success}^#{value} * #{fail}^#{diff} ="
-      x[value][i][:result] = (numerator/denominator) * multiplication
+      @result[value].merge!({
+        success => {
+          # formule: formule,
+          # success: success,
+          # fail: fail,
+          image: "http://latex.codecogs.com/png.latex?" + URI::encode(formule),
+          result: ((numerator/denominator) * multiplication).round(4)
+        }
+      })
     end
-    @result << x
   end
+
   haml :result
+  # @result.to_json
 end
 
