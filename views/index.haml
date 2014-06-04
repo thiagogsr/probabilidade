@@ -1,0 +1,19 @@
+!!!
+%html
+  %head
+    %title Probabilidade
+    %meta{"http-equiv" => 'X-UA-Compatible', content: 'IE=edge'}
+    %meta{name: 'viewport', content: 'width=device-width, initial-scale=1'}
+    %link{rel: 'stylesheet', href: '/css/bootstrap.min.css'}
+    %link{rel: 'stylesheet', href: '/css/bootstrap-theme.min.css'}
+  %body
+    .container-fluid
+      %h1 Probabilidade
+      %form{action: '/', method: 'POST', role: 'form'}
+        %p Informe a o tamanho da amostra
+        .form-group
+          %label{for: "sample"}= "Amostra"
+          %input.form-control{type: 'number', id: "sample", name: 'sample', placeholder: 'Tamanho da amostra (ex: 10)'}
+        %input.btn.btn-primary.form-control{type: 'submit', value: 'Executar'}
+        %br/
+        %br/
