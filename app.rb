@@ -43,9 +43,6 @@ post '/' do
 
       @result[value].merge!({
         success => {
-          # formule: formule,
-          # success: success,
-          # fail: fail,
           image: "http://latex.codecogs.com/png.latex?" + URI::encode(formule),
           result: ((numerator/denominator) * multiplication).round(4)
         }
