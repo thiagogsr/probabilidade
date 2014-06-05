@@ -17,7 +17,6 @@ set :user, 'deploy'
 set :deploy_to, '/var/www/probabilidade'
 set :repository, 'git@github.com:thiagogsr/probabilidade.git'
 set :branch, 'master'
-set :ssh_options, '-A'
 
 # Manually create these paths in shared/ (eg: shared/config/database.yml) in your server.
 # They will be linked in the 'deploy:link_shared_paths' step.
