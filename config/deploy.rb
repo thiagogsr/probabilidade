@@ -14,7 +14,6 @@ require 'mina/foreman'
 set :domain, '50.116.27.37'
 set :user, 'deploy'
 set :deploy_to, '/var/www/probabilidade'
-set :app_path, "#{deploy_to}/#{current_path}"
 set :repository, 'git@github.com:thiagogsr/probabilidade.git'
 set :branch, 'master'
 
@@ -60,12 +59,12 @@ task :deploy => :environment do
     invoke :'git:clone'
     invoke :'deploy:link_shared_paths'
     invoke :'bundle:install'
-    invoke 'foreman:export'
+    invoke :'foreman:export'
     # invoke :'rails:db_migrate'
     # invoke :'rails:assets_precompile'
 
     to :launch do
-      invoke 'foreman:restart'
+      invoke :'foreman:restart'
       # queue "touch #{deploy_to}/tmp/restart.txt"
     end
   end
