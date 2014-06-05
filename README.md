@@ -7,6 +7,7 @@ Programa para calcular a probabilidade de acordo com uma amostra.
 - Sinatra
 - HAML
 - Puma
+- Foreman
 
 ### Instalação
 1. Clone o projeto através da URL `$ git clone https://github.com/thiagogsr/probabilidade.git`
