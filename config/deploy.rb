@@ -59,7 +59,7 @@ task :deploy => :environment do
     invoke :'git:clone'
     invoke :'deploy:link_shared_paths'
     invoke :'bundle:install'
-    invoke :'foreman:export'
+    # invoke :'foreman:export'
     # invoke :'rails:db_migrate'
     # invoke :'rails:assets_precompile'
 
