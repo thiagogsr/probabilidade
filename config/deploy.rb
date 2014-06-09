@@ -12,6 +12,7 @@ require 'mina/rbenv'  # for rbenv support. (http://rbenv.org)
 
 set :application, 'probabilidade'
 set :domain, '50.116.27.37'
+set :port, 1500
 set :user, 'deploy'
 set :deploy_to, '/var/www/probabilidade'
 set :current_path, "#{deploy_to}/current"
