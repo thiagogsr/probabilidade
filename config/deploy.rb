@@ -60,7 +60,7 @@ task :deploy => :environment do
     invoke :'bundle:install'
 
     to :launch do
-      invoke :'puma:phased_restart'
+      invoke :'puma:restart'
     end
   end
 end
