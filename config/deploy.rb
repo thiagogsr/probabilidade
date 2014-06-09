@@ -66,12 +66,12 @@ end
 namespace :rackup do
   desc "Start the application '#{application}' services"
   task :start do
-    run "cd #{current_path}; RAILS_ENV=production bundle exec rackup -E production -D -P #{pid}"
+    run "cd #{current_path}; RAILS_ENV=production bundle exec rackup -E production -D -p 4567 -P #{pid}"
   end
 
   desc "Stop the application '#{application}' services"
   task :stop do
-    run "cd #{current_path}; if [ -f  ] && [ -e /proc/$(cat #{pid}) ]; then kill -9 `cat #{pid}`; fi"
+    run "cd #{current_path}; if [ -f #{pid} ] && [ -e /proc/$(cat #{pid}) ]; then kill -9 `cat #{pid}`; fi"
   end
  
   desc "Restart the application '#{application}' services"
