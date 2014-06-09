@@ -3,6 +3,7 @@ require 'mina/rails'
 require 'mina/git'
 require 'mina/rbenv'  # for rbenv support. (http://rbenv.org)
 # require 'mina/rvm'    # for rvm support. (http://rvm.io)
+require 'mina/puma'
 
 # Basic settings:
 #   domain       - The hostname to SSH to.
@@ -15,7 +16,6 @@ set :domain, '50.116.27.37'
 set :port, 1500
 set :user, 'deploy'
 set :deploy_to, '/var/www/probabilidade'
-set :current_path, "#{deploy_to}/current"
 set :repository, 'git@github.com:thiagogsr/probabilidade.git'
 set :branch, 'master'
 
@@ -43,8 +43,11 @@ end
 # For Rails apps, we'll make some of the shared paths that are shared between
 # all releases.
 task :setup => :environment do
-  queue! %[mkdir -p "#{deploy_to}/tmp/pids"]
-  queue! %[chmod g+rx,u+rwx "#{deploy_to}/tmp/pids"]
+  queue! %[mkdir -p "#{deploy_to}/shared/tmp/pids"]
+  queue! %[chmod g+rx,u+rwx "#{deploy_to}/shared/tmp/pids"]
+
+  queue! %[mkdir -p "#{deploy_to}/shared/tmp/sockets"]
+  queue! %[chmod g+rx,u+rwx "#{deploy_to}/shared/tmp/sockets"]
 end
 
 desc "Deploys the current version to the server."
@@ -57,43 +60,8 @@ task :deploy => :environment do
     invoke :'bundle:install'
 
     to :launch do
-      invoke :'rackup:restart'
+      invoke :'puma:phased_restart'
     end
-  end
-end
-
-namespace :rackup do
-  set :pid, "#{deploy_to}/tmp/pids/#{application}.pid"
-  set :start_rackup, %{
-    cd #{current_path}
-    bundle exec rackup -E #{rails_env} -D -p 4567 -P #{pid}
-  }
- 
-#                                                                    Start task
-# ------------------------------------------------------------------------------
-  desc "Start rackup"
-  task :start => :environment do
-    queue 'echo "-----> Start Unicorn"'
-    queue! start_rackup
-  end
- 
-#                                                                     Stop task
-# ------------------------------------------------------------------------------
-  desc "Stop rackup"
-  task :stop do
-    queue 'echo "-----> Stop Unicorn"'
-    queue! %{
-      test -s "#{pid}" && kill -QUIT `cat "#{pid}"` && echo "Stop Ok" && exit 0
-      echo >&2 "Not running"
-    }
-  end
- 
-#                                                                  Restart task
-# ------------------------------------------------------------------------------
-  desc "Restart rackup using 'upgrade'"
-  task :restart => :environment do
-    invoke 'rackup:stop'
-    invoke 'rackup:start'
   end
 end
 

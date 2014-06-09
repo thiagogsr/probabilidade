@@ -7,6 +7,8 @@ require 'open-uri'
 require 'json'
 
 configure { set :server, :puma }
+
+configure { set :server, :puma }
 set :public_folder, File.dirname(__FILE__) + '/public'
 
 helpers do
