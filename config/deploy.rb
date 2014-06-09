@@ -76,8 +76,8 @@ namespace :rackup do
  
   desc "Restart the application '#{application}' services"
   task :restart do
-    stop
-    start
+    invoke 'rackup:stop'
+    invoke 'rackup:stop'
   end
 end
 
