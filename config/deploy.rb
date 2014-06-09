@@ -18,7 +18,6 @@ set :deploy_to, '/var/www/probabilidade'
 set :current_path, "#{deploy_to}/current"
 set :repository, 'git@github.com:thiagogsr/probabilidade.git'
 set :branch, 'master'
-set :pid, "#{deploy_to}/tmp/pids/#{application}.pid"
 
 # Manually create these paths in shared/ (eg: shared/config/database.yml) in your server.
 # They will be linked in the 'deploy:link_shared_paths' step.
@@ -64,18 +63,35 @@ task :deploy => :environment do
 end
 
 namespace :rackup do
-  desc "Start the application '#{application}' services"
-  task :start do
-    queue! "cd #{current_path}; RAILS_ENV=production bundle exec rackup -E production -D -p 4567 -P #{pid}"
-  end
-
-  desc "Stop the application '#{application}' services"
-  task :stop do
-    queue! "cd #{current_path}; if [ -f #{pid} ] && [ -e /proc/$(cat #{pid}) ]; then kill -9 `cat #{pid}`; fi"
+  set :pid, "#{deploy_to}/tmp/pids/#{application}.pid"
+  set :start_rackup, %{
+    cd #{current_path}
+    bundle exec rackup -E #{rails_env} -D -p 4567 -P #{pid}
+  }
+ 
+#                                                                    Start task
+# ------------------------------------------------------------------------------
+  desc "Start rackup"
+  task :start => :environment do
+    queue 'echo "-----> Start Unicorn"'
+    queue! start_rackup
   end
  
-  desc "Restart the application '#{application}' services"
-  task :restart do
+#                                                                     Stop task
+# ------------------------------------------------------------------------------
+  desc "Stop rackup"
+  task :stop do
+    queue 'echo "-----> Stop Unicorn"'
+    queue! %{
+      test -s "#{pid}" && kill -QUIT `cat "#{pid}"` && echo "Stop Ok" && exit 0
+      echo >&2 "Not running"
+    }
+  end
+ 
+#                                                                  Restart task
+# ------------------------------------------------------------------------------
+  desc "Restart rackup using 'upgrade'"
+  task :restart => :environment do
     invoke 'rackup:stop'
     invoke 'rackup:start'
   end
