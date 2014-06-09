@@ -7,14 +7,13 @@ Programa para calcular a probabilidade de acordo com uma amostra.
 - Sinatra
 - HAML
 - Puma
-- Foreman
 
 ### Instalação
 1. Clone o projeto através da URL `$ git clone https://github.com/thiagogsr/probabilidade.git`
 1. Entre na pasta `$ cd probabilidade`
 1. Instale a gem [Bundler](http://bundler.io) através do comando `$ gem install bundler`
 1. Instale as gems através do comando `$ bundle install`
-1. Inicie a aplicação com o comando `$ rackup -p 4567`
+1. Inicie a aplicação com o comando `$ rackup -s Puma -p 4567`
 
 ## Contributing
 
