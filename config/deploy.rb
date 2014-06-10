@@ -12,8 +12,7 @@ require 'mina/puma'
 #   branch       - Branch name to deploy. (needed by mina/git)
 
 set :application, 'probabilidade'
-set :domain, '50.116.27.37'
-set :port, 1500
+set :domain, 'linode2'
 set :user, 'deploy'
 set :deploy_to, '/var/www/probabilidade'
 set :repository, 'git@github.com:thiagogsr/probabilidade.git'
