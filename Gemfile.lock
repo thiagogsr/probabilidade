@@ -4,18 +4,18 @@ GEM
     haml (5.0.4)
       temple (>= 0.8.0)
       tilt
-    mustermann (1.0.2)
+    mustermann (1.0.3)
     puma (3.12.1)
     rack (2.0.7)
-    rack-protection (2.0.1)
+    rack-protection (2.0.2)
       rack
-    sinatra (2.0.1)
+    sinatra (2.0.2)
       mustermann (~> 1.0)
       rack (~> 2.0)
-      rack-protection (= 2.0.1)
+      rack-protection (= 2.0.2)
       tilt (~> 2.0)
     temple (0.8.0)
-    tilt (2.0.8)
+    tilt (2.0.9)
 
 PLATFORMS
   ruby
